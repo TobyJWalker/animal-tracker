@@ -28,8 +28,9 @@ The following information will be stored for each animal:
 - Length
 - Diet
 - Personality
+- ID
+- Grouping
 - Notes
-- Image
 
 
 # Security 
