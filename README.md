@@ -21,7 +21,7 @@ The following information will be stored for each animal:
 - Species
 
 *Optional*
-- Hatch date (Age automatically calculated)
+- Date of birth (Age automatically calculated)
 - Weight
 - Height
 - Length
