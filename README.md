@@ -4,14 +4,14 @@ This is a web app which is to be used to keep track of pet information. You can 
 
 # Features
 
-- [] Create an account
-- [] Login to account
-- [] Create an animal
-- [] Edit an animal
-- [] Delete an animal
-- [] View all animals
-- [] Filter list of animals
-- [] API to access animal data
+- [ ] Create an account
+- [ ] Login to account
+- [ ] Create an animal
+- [ ] Edit an animal
+- [ ] Delete an animal
+- [ ] View all animals
+- [ ] Filter list of animals
+- [ ] API to access animal data
 
 # Stored Information
 
