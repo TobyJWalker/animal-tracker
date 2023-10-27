@@ -54,10 +54,10 @@ You can host it locally if you like, it is contained with `docker` so you will n
 
 ```bash
 docker build -t animal-tracker
-docker run -p 5000:5000 animal-tracker
+docker run -p 7474:7474 animal-tracker
 ```
 
-This will then be accessible on `localhost:5000`
+This will then be accessible on `localhost:7474`
 
 # Contribution
 
