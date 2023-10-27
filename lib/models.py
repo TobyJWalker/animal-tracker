@@ -10,6 +10,7 @@ else:
 
 class User(peewee.Model):
     username = peewee.CharField(unique=True)
+    email = peewee.CharField()
     password = peewee.CharField()
 
     class Meta:
