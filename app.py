@@ -1,5 +1,4 @@
 from flask import Flask, request, render_template, session, redirect
-import ssl, smtplib
 from lib.models import *
 
 app = Flask(__name__)
