@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+peewee = "*"
+pytest = "*"
+playwright = "*"
+pytest-xprocess = "*"
+pytest-playwright = "*"
+psycopg2 = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"
