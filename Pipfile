@@ -8,6 +8,7 @@ flask = "*"
 peewee = "*"
 pytest = "*"
 psycopg2 = "*"
+pyopenssl = "*"
 
 [dev-packages]
 
