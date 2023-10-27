@@ -11,7 +11,6 @@ This is a web app which is to be used to keep track of pet information. You can 
 - [ ] Delete an animal
 - [ ] View all animals
 - [ ] Filter list of animals
-- [ ] API to access animal data
 
 # Stored Information
 
@@ -42,12 +41,6 @@ Some basic security will be implemented such as:
 - using a secret key to encrypt the session cookie.
 - using https to encrypt the data sent between the client and server.
 - api key will be required to access personal animal data (You can only access your animals or others with permission).
-
-# How to use
-
-This site will be hosted by render on the following link: {tbc}
-
-To access the API, you will need to request your unique api key from the website. This will be sent to you via email and this will need to be included in the request when trying to query data. The API will be hosted on the following link: {tbc}
 
 # How to run (Not ready yet)
 
