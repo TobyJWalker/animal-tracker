@@ -2,6 +2,36 @@
 
 This is a web app which is to be used to keep track of pet information. You can choose to fill in as much or as little information as you like. This information can also be edited or deleted if wanted. I will add an API to the program too so that this data can be accessed by other programs too.
 
+# Features
+
+- [x] Create an account
+- [x] Login to account
+- [x] Create an animal
+- [x] Edit an animal
+- [x] Delete an animal
+- [x] View all animals
+- [x] Filter list of animals
+- [x] API to access animal data
+
+# Stored Information
+
+The following information will be stored for each animal:
+
+*Required*
+- Name
+- Species
+
+*Optional*
+- Hatch date (Age automatically calculated)
+- Weight
+- Height
+- Length
+- Diet
+- Personality
+- Notes
+- Image
+
+
 # Security 
 
 This program is a little project to practice my skills on so do not expect it to be super secure or maintained.
