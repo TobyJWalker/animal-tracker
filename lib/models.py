@@ -3,7 +3,7 @@ from hashlib import sha256
 from datetime import datetime
 
 if os.environ.get('APP_ENV') == 'test':
-    db = peewee.SqliteDatabase('|memory|')
+    db = peewee.SqliteDatabase(':memory:')
 else:
     db = peewee.SqliteDatabase('animal-info.sqlite3')
 
