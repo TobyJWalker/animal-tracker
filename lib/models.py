@@ -73,6 +73,17 @@ class Notes(peewee.Model):
     def __str__(self):
         return self.content
 
+class Group(peewee.Model):
+    name = peewee.CharField()
+    animals = peewee.ManyToManyField(Animal, backref='groups')
+
+    class Meta:
+        database = db
+        table_name = 'groups'
+
+    def __str__(self):
+        return self.name
+
 def create_db_tables():
     with db:
         db.create_tables([User, Animal, Notes])
