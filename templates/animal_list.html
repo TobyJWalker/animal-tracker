@@ -1,3 +1,61 @@
 {% extends "base.html" %}
 
-{% block title %}Sign Up{% endblock %}
+{% block title %}Your Animals{% endblock %}
+
+{% block content %}
+    <div class="container-lg border" style="max-height:80%;overflow:auto;min-width:70%;margin-top:2rem;padding:1rem 2rem 4rem 2rem;color:black;background-color:lightskyblue;border-radius:2rem;max-width:36rem;box-shadow:0px 0px 6px 2px rgba(0,0,0,0.3);border-width:3px;">
+        <div class="container-fluid mb-5">
+            <h1>Animals</h1>
+            <p class="lead">Here is a list of all your pets!</p>
+        </div>
+        <div class="container-fluid border border-bottom-0" name="animal-table" style="padding:0;">
+            <div class="d-flex" style="padding:0 auto 0 auto;background-color:rgb(34, 108, 145);">
+                <div class="col p-2 flex-grow-1 border border-top-0 border-left-0">
+                    <a href="/animals/add" class="btn btn-outline-primary" style="width:100%;color:white;border:none;">Add Animal</a>
+                </div>
+                <div class="col p-2 border border-top-0">
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Sort by...
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Name (asc)</a></li>
+                            <li><a class="dropdown-item" href="#">Name (desc)</a></li>
+                            <li><a class="dropdown-item" href="#">Age (low-high)</a></li>
+                            <li><a class="dropdown-item" href="#">Age (high-low)</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            {% if animals %}
+                {% for animal in animals %}
+                <a href="/animals/{{ animal.id }}" class="text-decoration-none" style="color:black;">
+                    <div class="row border-bottom m-0" style="background-color:white;">
+                        <div class="col" style="max-width:10%;padding:0;">
+                            {% if animal.image_url %}
+                                <img src="{{ animal.image_url }}" class="img-fluid" alt="..." width="160" height="160">
+                            {% else %}
+                                <img src="/static/images/placeholder.jpeg" class="img-fluid" alt="..." width="160" height="160">
+                            {% endif %}
+                        </div>
+                        <div class="col p-2 d-flex flex-grow-1 align-items-center justify-content-start">
+                            <div class="container-fluid text-start">
+                                <h4 class="card-title text-uppercase">{{ animal.name }}</h4>
+                                <p class="card-text">{{ animal.species }}</p>
+                            </div>
+                        </div>
+                        <div class="col p-2 d-flex align-items-center justify-content-end">
+                            <h1 style="color:gray;">></h1>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            {% else %}
+                <div class="container-fluid border-bottom py-4">
+                    <h3>You have no animals yet!</h3>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
