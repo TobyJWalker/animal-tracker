@@ -51,3 +51,15 @@ def test_signup_errors():
                 'password_rep': ['Passwords do not match']
                 }
     assert generate_signup_errors('test2', 'test@gmail', 'Abc123', 'abc123') == expected
+
+def test_validate_animal_name():
+    assert validate_animal_name('test')
+    assert validate_animal_name('test2')
+    assert not validate_animal_name('')
+    assert not validate_animal_name(' ')
+
+def test_validate_animal_species():
+    assert validate_animal_species('dog')
+    assert validate_animal_species('cat')
+    assert not validate_animal_species('')
+    assert not validate_animal_species(' ')
