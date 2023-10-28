@@ -37,11 +37,11 @@ I have included a bash script for Mac/Linux which can run the tests for you if y
 
 To allow the file to be ran, run the following:
 
-`chmod +x test.sh`
+`chmod +x test`
 
 Then to run the tests, run the following:
 
-`./test.sh`
+`./test`
 
 # Security 
 
