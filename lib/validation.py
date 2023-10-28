@@ -73,3 +73,30 @@ def generate_signup_errors(username, email, password, password_conf):
         error_count += 1
 
     return errors if error_count > 0 else None
+
+def validate_animal_name(name):
+    if name == '' or name.isspace():
+        return False
+    return True
+
+def validate_animal_species(species):
+    if species == '' or species.isspace():
+        return False
+    return True
+
+def generate_animal_errors(name, species):
+    errors = {
+        'name': [],
+        'species': []
+    }
+
+    error_count = 0
+
+    if not validate_animal_name(name):
+        errors['name'].append('Name cannot be empty')
+        error_count += 1
+    if not validate_animal_species(species):
+        errors['species'].append('Species cannot be empty')
+        error_count += 1
+
+    return errors if error_count > 0 else None
