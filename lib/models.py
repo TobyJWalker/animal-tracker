@@ -23,6 +23,17 @@ class User(peewee.Model):
     @staticmethod
     def hash_password(password):
         return sha256(password.encode('utf-8')).hexdigest()
+    
+    @staticmethod
+    def check_login(username, password):
+        try:
+            user = User.get(User.username == username)
+            if user.password == User.hash_password(password):
+                return user
+            else:
+                return None
+        except:
+            return None
 
 
 class Animal(peewee.Model):
