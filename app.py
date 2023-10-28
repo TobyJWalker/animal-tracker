@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, session, redirect
-from lib.models import *
+from lib.validation import *
 
 # create the app and configure it
 app = Flask(__name__)
@@ -17,6 +17,22 @@ def signup():
         return redirect('/animals')
     else:
         return render_template('signup.html')
+    
+@app.route('/signup', methods=['POST'])
+def create_account():
+    username = request.form['username']
+    email = request.form['email']
+    password = request.form['password']
+    password_rep = request.form['password-confirm']
+
+    errors = generate_signup_errors(username, email, password, password_rep)
+
+    if errors == None:
+        hashed_password = User.hash_password(password)
+        User.create(username=username, email=email, password=hashed_password)
+        return redirect('/login')
+    else:
+        return render_template('signup.html', errors=errors)
 
 # login page
 @app.route('/login', methods=['GET'])
@@ -25,6 +41,19 @@ def login():
         return redirect('/animals')
     else:
         return render_template('login.html')
+    
+@app.route('/login', methods=['POST'])
+def login_user():
+    username = request.form['username']
+    password = request.form['password']
+
+    user = User.check_login(username, password)
+
+    if user == None:
+        return render_template('login.html', error=True)
+    else:
+        session['user_id'] = user.id
+        return redirect('/animals')
 
 # logout page
 @app.route('/logout', methods=['GET'])
