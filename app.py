@@ -53,15 +53,24 @@ def login_user():
         return render_template('login.html', error=True)
     else:
         session['user_id'] = user.id
+        session['username'] = user.username
         return redirect('/animals')
 
 # logout page
-@app.route('/logout', methods=['GET'])
+@app.route('/logout', methods=['POST'])
 def logout():
     session.pop('user_id', None)
     return redirect('/login')
 
-
+# animals page
+@app.route('/animals', methods=['GET'])
+def animals():
+    if 'user_id' in session:
+        user = User.get(User.id == session['user_id'])
+        animals = user.animals
+        return render_template('animal_list.html', animals=animals)
+    else:
+        return redirect('/login')
 
 
 
