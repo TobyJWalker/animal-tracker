@@ -21,6 +21,7 @@ The following information will be stored for each animal:
 - Species
 
 *Optional*
+- Colour
 - Date of birth (Age automatically calculated)
 - Weight
 - Height
