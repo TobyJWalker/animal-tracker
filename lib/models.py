@@ -39,6 +39,7 @@ class User(peewee.Model):
 class Animal(peewee.Model):
     name = peewee.CharField()
     species = peewee.CharField()
+    colour = peewee.CharField()
     age = peewee.IntegerField()
     date_of_birth = peewee.DateField()
     weight = peewee.FloatField()
@@ -56,6 +57,9 @@ class Animal(peewee.Model):
 
     def __str__(self):
         return self.name
+    
+    def get_animals_by_user_id(user_id):
+        return Animal.select().where(Animal.owner == user_id)
 
 
 class Notes(peewee.Model):
