@@ -31,12 +31,12 @@
             {% if animals %}
                 {% for animal in animals %}
                 <a href="/animals/{{ animal.id }}" class="text-decoration-none" style="color:black;">
-                    <div class="row border-bottom m-0" style="background-color:white;">
-                        <div class="col" style="max-width:10%;padding:0;">
-                            {% if animal.image_url %}
-                                <img src="{{ animal.image_url }}" class="img-fluid" alt="..." width="160" height="160">
+                    <div class="row border-bottom m-0" style="background-color:white;height:10vh;">
+                        <div class="col" style="max-width:10vh;padding:0">
+                            {% if animal.img_url %}
+                                <img src="{{ animal.img_url }}" class="img-fluid" alt="..." width="90" height="90" style="height:100%;width:100%;object-fit:cover;">
                             {% else %}
-                                <img src="/static/images/placeholder.jpeg" class="img-fluid" alt="..." width="160" height="160">
+                                <img src="/static/images/placeholder.jpeg" class="img-fluid" alt="..." width="90" height="90" style="height:100%;width:100%;object-fit:cover;">
                             {% endif %}
                         </div>
                         <div class="col p-2 d-flex flex-grow-1 align-items-center justify-content-start">
