@@ -3,7 +3,7 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-    <div class="container-sm" style="padding:2rem 5rem 5rem 5rem;color:black;background-color:lightskyblue;border:2px;border-radius:2rem;max-width:36rem;box-shadow:0px 0px 6px 2px rgba(0,0,0,0.3);">
+    <div class="container-sm" style="margin-top:2rem;padding:0 5rem 4rem 5rem;color:black;background-color:lightskyblue;border:2px;border-radius:2rem;max-width:36rem;box-shadow:0px 0px 6px 2px rgba(0,0,0,0.3);">
         <form action="/signup" method="post">
             <div class="container-fluid" style="padding-bottom:1rem;padding-top:2rem;color:black;">
                 <h1>Sign up</h1>
@@ -39,7 +39,7 @@
             <div class="mb-3 mx-auto" id="confirm-password-input">
                 <label for="password-confirm" class="form-label">Confirm Password</label>
                 {% if errors %}
-                    {% for error in errors['password_confirmation'] %}
+                    {% for error in errors['password_rep'] %}
                         <p class="text-danger">{{ error }}</p>
                     {% endfor %}
                 {% endif %}
