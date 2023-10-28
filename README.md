@@ -31,6 +31,17 @@ The following information will be stored for each animal:
 - Grouping
 - Notes
 
+# How to run tests
+
+I have included a bash script for Mac/Linux which can run the tests for you if you wish without having to manually add or type out environment variables required for testing. 
+
+To allow the file to be ran, run the following:
+
+`chmod +x test.sh`
+
+Then to run the tests, run the following:
+
+`./test.sh`
 
 # Security 
 
