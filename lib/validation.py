@@ -50,7 +50,7 @@ def generate_signup_errors(username, email, password, password_conf):
 
     error_count = 0
 
-    if not check_username_unique(username):
+    if check_username_unique(username):
         errors['username'].append('Username already exists')
         error_count += 1
     if not validate_email(email):
