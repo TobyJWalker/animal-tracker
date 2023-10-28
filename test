@@ -1,0 +1,1 @@
+APP_ENV='test' pytest -x
