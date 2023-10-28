@@ -71,6 +71,14 @@ def animals():
     else:
         return redirect('/login')
 
+# add animal page
+@app.route('/animals/add', methods=['GET'])
+def add_animal():
+    if 'user_id' in session:
+        return render_template('new_animal.html')
+    else:
+        return redirect('/login')
+
 
 
 # run the app if file is executed
