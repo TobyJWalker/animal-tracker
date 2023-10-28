@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+    <div class="container-sm" style="padding:2rem 5rem 5rem 5rem;color:black;background-color:lightskyblue;border-radius:2rem;max-width:36rem;box-shadow:2px 2px 2px 1px rgba(0,0,0,0.4);">
+        <form action="/signup" method="post">
+            <div class="container-fluid" style="padding-bottom:3rem;padding-top:2rem;color:black;">
+                <h1>Sign up</h1>
+                <p class="lead">Create an account today!</p>
+            </div>
+            <div class="mb-3 mx-auto" id="username-input">
+                <label for="username" class="form-label">Username</label>
+                {% if errors %}
+                    {% for error in errors['username'] %}
+                        <p class="text-danger">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+                <input class="form-control" type="text" name="username" id="username" required>
+            </div>
+            <div class="mb-3 mx-auto" id="email-input">
+                <label for="email" class="form-label">Email</label>
+                {% if errors %}
+                    {% for error in errors['email'] %}
+                        <p class="text-danger">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+                <input class="form-control" type="email" name="email" id="email" required>
+            </div>
+            <div class="mb-3 mx-auto" id="password-input">
+                <label for="password" class="form-label">Password</label>
+                {% if errors %}
+                    {% for error in errors['password'] %}
+                        <p class="text-danger">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+                <input class="form-control" type="password" name="password" id="password" required>
+            </div>
+            <div class="mb-3 mx-auto" id="confirm-password-input">
+                <label for="password-confirm" class="form-label">Confirm Password</label>
+                {% if errors %}
+                    {% for error in errors['password_confirmation'] %}
+                        <p class="text-danger">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+                <input class="form-control" type="password" name="password-confirm" id="password-confirm" required>
+            </div>
+            <button class="btn btn-outline-primary" type="submit" id="sign-up-button">Sign up</button>
+        </form>
+    </div>
+{% endblock %}
