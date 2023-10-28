@@ -39,16 +39,16 @@ class User(peewee.Model):
 class Animal(peewee.Model):
     name = peewee.CharField()
     species = peewee.CharField()
-    colour = peewee.CharField()
-    age = peewee.IntegerField()
-    date_of_birth = peewee.DateField()
-    weight = peewee.FloatField()
-    height = peewee.FloatField()
-    length = peewee.FloatField()
-    personality = peewee.CharField()
-    tag = peewee.CharField()
-    group = peewee.CharField()
-    img_url = peewee.CharField()
+    colour = peewee.CharField(null=True)
+    age = peewee.IntegerField(null=True)
+    date_of_birth = peewee.DateField(null=True)
+    weight = peewee.FloatField(null=True)
+    height = peewee.FloatField(null=True)
+    length = peewee.FloatField(null=True)
+    personality = peewee.CharField(null=True)
+    tag = peewee.CharField(null=True)
+    group = peewee.CharField(null=True)
+    img_url = peewee.CharField(null=True)
     owner = peewee.ForeignKeyField(User, backref='animals')
 
     class Meta:
@@ -59,7 +59,7 @@ class Animal(peewee.Model):
         return self.name
     
     def get_animals_by_user_id(user_id):
-        return Animal.select().where(Animal.owner == user_id)
+        return [animal for animal in Animal.select().where(Animal.owner == user_id)]
 
 
 class Notes(peewee.Model):
