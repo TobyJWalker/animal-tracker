@@ -29,6 +29,7 @@ The following information will be stored for each animal:
 - Personality
 - ID
 - Grouping
+- Image
 - Notes
 
 # How to run tests
