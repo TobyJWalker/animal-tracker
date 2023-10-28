@@ -48,7 +48,7 @@ Then to run the tests, run the following:
 This program is a little project to practice my skills on so do not expect it to be super secure or maintained.
 
 Some basic security will be implemented such as:
-- hashing passwords and using a salt to make it harder to crack.
+- hashing passwords to make it harder to crack.
 - using a secret key to encrypt the session cookie.
 - using https to encrypt the data sent between the client and server.
 - api key will be required to access personal animal data (You can only access your animals or others with permission).
