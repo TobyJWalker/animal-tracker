@@ -47,6 +47,7 @@ class Animal(peewee.Model):
     personality = peewee.CharField()
     tag = peewee.CharField()
     group = peewee.CharField()
+    img_url = peewee.CharField()
     owner = peewee.ForeignKeyField(User, backref='animals')
 
     class Meta:
