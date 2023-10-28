@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Add New Animal{% endblock %}
+
+{% block content %}
+
+    <div class="container-sm border" style="border-width:3px;margin-top:2rem;padding:0 5rem 4rem 5rem;color:black;background-color:lightskyblue;border-radius:2rem;max-width:36rem;box-shadow:0px 0px 6px 2px rgba(0,0,0,0.3);">
+        
+        <form action="/animals/create" method="post" enctype="multipart/form-data">
+            <div class="container-fluid" style="padding-bottom:1rem;padding-top:2rem;color:black;">
+                <h1>Add New Animal</h1>
+                <p class="lead">Add a new pet to your collection!</p>
+            </div>
+            <div class="mb-3 mx-auto" id="name-input">
+                <label for="name" class="form-label">Name*</label>
+                <input class="form-control" type="text" name="name" id="name" required>
+            </div>
+            <div class="mb-3 mx-auto" id="species-input">
+                <label for="species" class="form-label">Species*</label>
+                <input class="form-control" type="text" name="species" id="species" required>
+            </div>
+            <div class="mb-3 mx-auto" id="age-input">
+                <label for="age" class="form-label">Date of birth</label>
+                <input class="form-control" type="date" name="date-of-birth" id="date-of-birth">
+            </div>
+            <div class="mb-3 mx-auto" id="image-input">
+                <label for="image" class="form-label">Image</label>
+                <input class="form-control" type="file" name="image" id="image">
+            </div>
+            <button class="btn btn-primary" type="submit" id="sign-up-button">Add Animal</button>
+        </form>
+        <br>
+        <a href="/animals" style="color:blue;">Back to your animals</a>
+
+    </div>
+
+{% endblock %}
