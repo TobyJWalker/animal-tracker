@@ -66,7 +66,7 @@ def logout():
 @app.route('/animals', methods=['GET'])
 def animals():
     if 'user_id' in session:
-        animals = Animal.select().where(Animal.owner == session['user_id'])
+        animals = Animal.get_animals_by_user_id(session['user_id'])
         return render_template('animal_list.html', animals=animals)
     else:
         return redirect('/login')
