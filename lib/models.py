@@ -75,6 +75,9 @@ class Notes(peewee.Model):
 
     def __str__(self):
         return self.content
+    
+    def get_by_animal_id(animal_id):
+        return [note for note in Notes.select().where(Notes.animal == animal_id)]
 
 class Group(peewee.Model):
     name = peewee.CharField()
