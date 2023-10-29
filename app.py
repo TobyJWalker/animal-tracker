@@ -1,9 +1,28 @@
 from flask import Flask, request, render_template, session, redirect
+from werkzeug.utils import secure_filename
+from threading import Thread
+from PIL import Image
 from lib.validation import *
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 # create the app and configure it
 app = Flask(__name__)
 create_db_tables()
+
+# check if an uploaded image is an actual image file
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# compress and save images uploaded
+def process_image(image):
+    secure_name = secure_filename(image.filename)
+    with open(f'static/images/{secure_name}', 'wb') as file:
+        file.write(image.read())
+    
+    pil_image = Image.open(f"static/images/{secure_name}")
+    pil_image.thumbnail((500, 500))
+    pil_image.save(f"static/images/{secure_name}")
 
 # index redirect to sign up page
 @app.route('/', methods=['GET'])
@@ -78,6 +97,32 @@ def add_animal():
         return render_template('new_animal.html')
     else:
         return redirect('/login')
+
+@app.route('/animals/add', methods=['POST'])
+def create_animal():
+    name = request.form['name']
+    species = request.form['species']
+    date_of_birth = request.form.get('date-of-birth', None)
+    image = request.files.get('image', None)
+
+    if image != None and allowed_file(image.filename):
+        Thread(target=process_image, args=(image,)).start()
+        secure_name = secure_filename(image.filename)
+    else:
+        secure_name = ''
+
+    errors = generate_animal_errors(name, species)
+
+    if errors == None:
+        Animal.create(name=name, 
+                    species=species, 
+                    owner=session['user_id'], 
+                    date_of_birth=date_of_birth, 
+                    img_url=f'static/images/{secure_name}' if image != None else None
+                    )
+        return redirect('/animals')
+    else:
+        return render_template('new_animal.html', errors=errors)
 
 
 
