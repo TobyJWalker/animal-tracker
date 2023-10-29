@@ -124,6 +124,21 @@ def create_animal():
     else:
         return render_template('new_animal.html', errors=errors)
 
+@app.route('/animals/<int:animal_id>', methods=['GET'])
+def view_animal(animal_id):
+    if 'user_id' in session:
+        try:
+            animal = Animal.select().where(Animal.id == animal_id).get()
+            notes = Notes.get_by_animal_id(animal_id)
+
+            if animal.owner.id != session['user_id']:
+                return redirect('/animals')
+        except:
+            return redirect('/animals')
+        return render_template('animal_page.html', animal=animal, notes=notes)
+    else:
+        return redirect('/login')
+
 
 
 # run the app if file is executed
