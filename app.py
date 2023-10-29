@@ -138,6 +138,23 @@ def view_animal(animal_id):
         return render_template('animal_page.html', animal=animal, notes=notes)
     else:
         return redirect('/login')
+    
+@app.route('/animals/<int:animal_id>/notes/add', methods=['POST'])
+def add_note(animal_id):
+    if 'user_id' in session:
+        animal = Animal.select().where(Animal.id == animal_id).get()
+
+        if animal.owner.id != session['user_id']:
+            return redirect('/animals')
+        else:
+
+            content = request.form['content']
+
+            Notes.create(content=content, animal=animal_id)
+
+            return redirect(f'/animals/{animal_id}')
+    else:
+        return redirect('/login')
 
 
 
