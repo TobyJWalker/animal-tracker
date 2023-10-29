@@ -132,7 +132,7 @@
                 {% for note in notes %}
                     <div class="row p-3 border-bottom" style="background-color:white;">
                         <div class="col">
-                            <h6 class="lead">{{ note.content }}</h6>
+                            <h6 class="lead">{{ note.content|safe }}</h6>
                         </div>
                     </div>
                 {% endfor %}
