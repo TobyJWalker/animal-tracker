@@ -19,26 +19,12 @@ def allowed_file(filename):
 def process_image(image):
     secure_name = secure_filename(image.filename)
 
-    if APP_ENV == 'production':
-        with open(f'../shared/images/{secure_name}', 'wb') as file:
-            file.write(image.read())
-        pil_image = Image.open(f"../shared/images/{secure_name}")
-        pil_image.thumbnail((500, 500))
-        pil_image.save(f"../shared/images/{secure_name}")
-    else:
-        with open(f'images/{secure_name}', 'wb') as file:
-            file.write(image.read())
-        pil_image = Image.open(f"images/{secure_name}")
-        pil_image.thumbnail((500, 500))
-        pil_image.save(f"images/{secure_name}")
+    with open(f'static/images/{secure_name}', 'wb') as file:
+        file.write(image.read())
 
-# overwrite the default static image file serving
-@app.route('/images/<path:filename>')
-def serve_image(filename):
-    if APP_ENV == 'production':
-        return send_from_directory('../shared/images', filename)
-    else:
-        return send_from_directory('images', filename)
+    pil_image = Image.open(f"static/images/{secure_name}")
+    pil_image.thumbnail((500, 500))
+    pil_image.save(f"static/images/{secure_name}")
 
 
 # index redirect to sign up page
@@ -135,7 +121,7 @@ def create_animal():
                     species=species, 
                     owner=session['user_id'], 
                     date_of_birth=date_of_birth, 
-                    img_url=f'/images/{secure_name}' if image != None else None
+                    img_url=f'/static/images/{secure_name}' if image != None else None
                     )
         return redirect('/animals')
     else:
