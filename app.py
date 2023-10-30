@@ -1,10 +1,11 @@
-from flask import Flask, request, render_template, session, redirect
+from flask import Flask, request, render_template, session, redirect, send_from_directory
 from werkzeug.utils import secure_filename
 from threading import Thread
 from PIL import Image
 from lib.validation import *
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+APP_ENV = os.environ.get('APP_ENV', 'development')
 
 # create the app and configure it
 app = Flask(__name__)
@@ -17,12 +18,28 @@ def allowed_file(filename):
 # compress and save images uploaded
 def process_image(image):
     secure_name = secure_filename(image.filename)
-    with open(f'static/images/{secure_name}', 'wb') as file:
-        file.write(image.read())
-    
-    pil_image = Image.open(f"static/images/{secure_name}")
-    pil_image.thumbnail((500, 500))
-    pil_image.save(f"static/images/{secure_name}")
+
+    if APP_ENV == 'production':
+        with open(f'../shared/images/{secure_name}', 'wb') as file:
+            file.write(image.read())
+        pil_image = Image.open(f"../shared/images/{secure_name}")
+        pil_image.thumbnail((500, 500))
+        pil_image.save(f"../shared/images/{secure_name}")
+    else:
+        with open(f'images/{secure_name}', 'wb') as file:
+            file.write(image.read())
+        pil_image = Image.open(f"images/{secure_name}")
+        pil_image.thumbnail((500, 500))
+        pil_image.save(f"images/{secure_name}")
+
+# overwrite the default static image file serving
+@app.route('/images/<path:filename>')
+def serve_image(filename):
+    if APP_ENV == 'production':
+        return send_from_directory('../shared/images', filename)
+    else:
+        return send_from_directory('images', filename)
+
 
 # index redirect to sign up page
 @app.route('/', methods=['GET'])
@@ -118,7 +135,7 @@ def create_animal():
                     species=species, 
                     owner=session['user_id'], 
                     date_of_birth=date_of_birth, 
-                    img_url=f'static/images/{secure_name}' if image != None else None
+                    img_url=f'/images/{secure_name}' if image != None else None
                     )
         return redirect('/animals')
     else:
@@ -149,6 +166,7 @@ def add_note(animal_id):
         else:
 
             content = request.form['content']
+            content = content.replace('\n', '<br>')
 
             Notes.create(content=content, animal=animal_id)
 
@@ -160,10 +178,10 @@ def add_note(animal_id):
 
 # run the app if file is executed
 if __name__ == "__main__":
-    if os.environ.get('APP_ENV') == 'test':
+    if APP_ENV == 'test':
         app.secret_key = os.urandom(16)
         app.run(debug=True, port=int(os.environ.get('PORT', 7474)))
-    elif os.environ.get('APP_ENV') == 'production':
+    elif APP_ENV == 'production':
         app.secret_key = os.urandom(16)
         app.run(debug=False, host='0.0.0.0', port=7474)
     else:
