@@ -55,16 +55,31 @@ Some basic security will be implemented such as:
 - using https to encrypt the data sent between the client and server.
 - api key will be required to access personal animal data (You can only access your animals or others with permission).
 
-# How to run (Not ready yet)
+# How to run
 
-You can host it locally if you like, it is contained with `docker` so you will need `docker` installed. You can then run the following command to build the image and run it:
+You can host it locally if you like, but some setup is required.
+
+**SETUP**
 
 ```bash
-docker build -t animal-tracker
-docker run -p 7474:7474 animal-tracker
+Mac/Linux:
+    chmod +x setup.sh
+    ./setup.sh
+
+Windows:
+    setup.bat
 ```
 
-This will then be accessible on `localhost:7474`
+** RUN **
+
+```bash
+Mac/Linux:
+    chmod +x run.sh
+    ./run.sh
+
+Windows:
+    run.bat
+```
 
 # Contribution
 
