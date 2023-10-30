@@ -2,6 +2,16 @@ import peewee, os
 from hashlib import sha256
 from datetime import datetime
 
+# if production ver, create shared directory tree if not exists
+if not os.path.exists('../shared/db') and os.environ.get('APP_ENV') == 'production':
+    os.makedirs('../shared/db')
+    os.makedirs('../shared/images')
+
+# if test ver, make images folder
+if not os.path.exists('images') and os.environ.get('APP_ENV') != 'production':
+    os.makedirs('images')
+
+# create the peewee db object
 if os.environ.get('APP_ENV') == 'test':
     db = peewee.SqliteDatabase('test-db.sqlite3')
 elif os.environ.get('APP_ENV') == 'production':
