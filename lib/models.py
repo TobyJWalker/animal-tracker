@@ -65,6 +65,27 @@ class Animal(peewee.Model):
     def get_animals_by_user_id(user_id):
         return [animal for animal in Animal.select().where(Animal.owner == user_id)]
 
+    def sort_animals(animal_list, sort_by, order):
+        if sort_by == 'name':
+            if order == 'asc':
+                animals = sorted(animal_list, key=lambda animal: animal.name.lower())
+            else:
+                animals = sorted(animal_list, key=lambda animal: animal.name.lower(), reverse=True)
+        elif sort_by == 'species':
+            if order == 'asc':
+                animals = sorted(animal_list, key=lambda animal: animal.species.lower())
+            else:
+                animals = sorted(animal_list, key=lambda animal: animal.species.lower(), reverse=True)
+        elif sort_by == 'age':
+            if order == 'asc':
+                animals = sorted(animal_list, key=lambda animal: animal.age)
+            else:
+                animals = sorted(animal_list, key=lambda animal: animal.age, reverse=True)
+        else:
+            return animal_list
+        
+        return animals
+
 
 class Notes(peewee.Model):
     content = peewee.TextField()
