@@ -17,10 +17,10 @@ def test_sort_animals():
     assert animals_sorted[0].name == 'ringo'
 
     animals_sorted = Animal.sort_animals(animals, 'age', 'asc')
-    assert animals_sorted[0].age == 10
+    assert animals_sorted[0].age == 1
 
     animals_sorted = Animal.sort_animals(animals, 'age', 'desc')
-    assert animals_sorted[0].age == 1
+    assert animals_sorted[0].age == 10
 
     animals_sorted = Animal.sort_animals(animals, 'species', 'asc')
     assert animals_sorted[0].species == 'bird'
