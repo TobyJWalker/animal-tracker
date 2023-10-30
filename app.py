@@ -92,6 +92,19 @@ def animals():
         return render_template('animal_list.html', animals=animals)
     else:
         return redirect('/login')
+    
+# route to sort animal
+@app.route('/animals/sort/<string:sort_by>-<string:order>/', methods=['GET'])
+def sort_animals(sort_by, order):
+    if 'user_id' not in session:
+        return redirect('/login')
+    
+    animals = Animal.get_animals_by_user_id(session['user_id'])
+
+    animals_sorted = Animal.sort_animals(animals, sort_by, order)
+
+    return render_template('animal_list.html', animals=animals_sorted)
+    
 
 # add animal page
 @app.route('/animals/add', methods=['GET'])
@@ -101,6 +114,7 @@ def add_animal():
     else:
         return redirect('/login')
 
+# route to create a new animal
 @app.route('/animals/add', methods=['POST'])
 def create_animal():
     name = request.form['name']
@@ -127,6 +141,7 @@ def create_animal():
     else:
         return render_template('new_animal.html', errors=errors)
 
+# route to view an animal
 @app.route('/animals/<int:animal_id>', methods=['GET'])
 def view_animal(animal_id):
     if 'user_id' in session:
@@ -141,7 +156,8 @@ def view_animal(animal_id):
         return render_template('animal_page.html', animal=animal, notes=notes)
     else:
         return redirect('/login')
-    
+
+# route to add a note to an animal
 @app.route('/animals/<int:animal_id>/notes/add', methods=['POST'])
 def add_note(animal_id):
     if 'user_id' in session:
