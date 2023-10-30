@@ -18,7 +18,15 @@
         </div>
         
         <div class="row mt-5">
-            <div class="col"></div>
+            <div class="col">
+                <div class="d-flex p-2 justify-content-start">
+                    <form action="/animals" method="get">
+                        <button class="btn btn-light mx-2 px-5" type="submit" aria-expanded="false">
+                            Back
+                        </button>
+                    </form>
+                </div>
+            </div>
             <div class="col text-center">
                 <h1 class="text-capitalize">{{ animal.name }}</h1>
             </div>
