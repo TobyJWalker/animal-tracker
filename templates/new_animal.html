@@ -24,8 +24,11 @@
                 <input class="form-control" type="date" name="date-of-birth" id="date-of-birth">
             </div>
             <div class="mb-3 mx-auto" id="image-input">
-                <label for="image" class="form-label">Image</label>
-                <input class="form-control" type="file" name="image" id="image">
+                <label for="image" class="form-label">Image</label><br>
+                <label for="file-upload" class="custom-file-upload">
+                    <i class="fa fa-cloud-upload"></i> Upload Picture
+                </label>
+                <input id="file-upload" type="file"/>
             </div>
             <button class="btn btn-primary" type="submit" id="add-animal-button">Add Animal</button>
         </form>
