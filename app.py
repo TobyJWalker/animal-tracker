@@ -176,6 +176,49 @@ def add_note(animal_id):
     else:
         return redirect('/login')
 
+# route to delete a note from an animal
+@app.route('/note/<int:note_id>/delete', methods=['POST'])
+def delete_note(note_id):
+    if 'user_id' not in session:
+        return redirect('/login')
+    
+    note = Notes.select().where(Notes.id == note_id).get()
+
+    if note.animal.owner.id != session['user_id']:
+        return redirect('/animals')
+    else:
+        Notes.delete().where(Notes.id == note_id).execute()
+        return redirect(f'/animals/{note.animal.id}')
+    
+# route to get edit note form 
+@app.route('/note/<int:note_id>/edit', methods=['GET'])
+def edit_note_form(note_id):
+    if 'user_id' not in session:
+        return redirect('/login')
+    
+    note = Notes.select().where(Notes.id == note_id).get()
+
+    if note.animal.owner.id != session['user_id']:
+        return redirect('/animals')
+    else:
+        return render_template('edit_note.html', note=note)
+
+# route to edit a note
+@app.route('/note/<int:note_id>/edit', methods=['POST'])
+def edit_note_action(note_id):
+    if 'user_id' not in session:
+        return redirect('/login')
+    
+    note = Notes.select().where(Notes.id == note_id).get()
+
+    if note.animal.owner.id != session['user_id']:
+        return redirect('/animals')
+    else:
+        content = request.form['content']
+        content = content.replace('\n', '<br>')
+        Notes.update(content=content).where(Notes.id == note_id).execute()
+        return redirect(f'/animals/{note.animal.id}')
+
 
 
 # run the app if file is executed
