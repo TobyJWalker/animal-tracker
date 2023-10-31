@@ -1,1 +1,1 @@
-python3 app.py
+pipenv run python3 app.py
