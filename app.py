@@ -103,7 +103,7 @@ def sort_animals(sort_by, order):
 
     animals_sorted = Animal.sort_animals(animals, sort_by, order)
 
-    return render_template('animal_list.html', animals=animals_sorted)
+    return render_template('animal_list.html', animals=animals_sorted, sort_by=sort_by)
     
 
 # add animal page

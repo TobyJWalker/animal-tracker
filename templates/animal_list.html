@@ -15,10 +15,17 @@
                 </div>
                 <div class="col p-2 border border-top-0">
                     <div class="dropdown">
-                        <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Sort by...
-                        </button>
+                        {% if sort_by %}
+                            <button class="btn btn-light dropdown-toggle text-capitalize" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ sort_by }}
+                            </button>
+                        {% else %}
+                            <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Sort by...
+                            </button>
+                        {% endif %}
                         <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/animals">None</a></li>
                             <li><a class="dropdown-item" href="/animals/sort/name-asc">Name (a-z)</a></li>
                             <li><a class="dropdown-item" href="/animals/sort/name-desc">Name (z-a)</a></li>
                             <li><a class="dropdown-item" href="/animals/sort/age-asc">Age (low-high)</a></li>
