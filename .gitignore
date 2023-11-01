@@ -2,7 +2,6 @@
 .DS_Store
 shared/
 animal-repo.tar
-docker-compose.yml
 
 
 #Byte-compiled / optimized / DLL files
