@@ -6,7 +6,7 @@ from datetime import datetime
 if os.environ.get('APP_ENV') == 'test':
     db = peewee.SqliteDatabase('test-db.sqlite3')
 else:
-    db = peewee.SqliteDatabase('animal-info.sqlite3')
+    db = peewee.SqliteDatabase('shared/db/animal-info.sqlite3')
 
 
 class User(peewee.Model):
