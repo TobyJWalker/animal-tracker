@@ -20,7 +20,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 create_db_tables()
 
 # create ssl context
-context = ('cert.pem', 'priv-key.pem')
+context = ('cert.pem', 'priv_key.pem')
 
 # add markdown extension
 app.jinja_env.add_extension(MarkdownExtension)
