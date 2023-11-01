@@ -127,7 +127,7 @@
                 {% for note in notes %}
                     <div class="row p-3 border-bottom text-start" style="background-color:white;">
                         <div class="col">
-                            <h6 class="lead">{{ note.content|safe }}</h6>
+                            <h6 class="lead">{% markdown %}{{ note.content|safe }}{% endmarkdown %}</h6>
                         </div>
                         <div class="col mx-0" style="max-width:7.5%;">
                             <form action="/note/{{ note.id }}/edit" method="GET">
