@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}{{ animal.name }}{% endblock %}
+
+{% block content %}
+    <div class="container-lg border" style="max-height:85vh;overflow:scroll;min-width:70%;margin-top:2rem;padding:1rem 2rem 4rem 2rem;color:black;background-color:lightskyblue;border-radius:2rem;max-width:36rem;box-shadow:0px 0px 6px 2px rgba(0,0,0,0.3);border-width:3px;">
+        <form action="/animal/{{ animal.id }}/edit" method="post" enctype="multipart/form-data">
+            <div class="row justify-content-md-center">
+                <div clas="col-md-auto"></div>
+                <div class="col col-xs-2">
+                    <div class="row-xs-2">
+                        {% if animal.img_url %}
+                            <img src="{{ animal.img_url }}" class="img-fluid rounded-circle" alt="..." width="90px" height="90px" style="height:130px;width:130px;object-fit:cover;">
+                        {% else %}
+                            <img src="/static/images/placeholder.jpeg" class="img-fluid rounded-circle" alt="..." width="90px" height="90px" style="height:130px;width:130px;object-fit:cover;">
+                        {% endif %}
+                    </div>
+                    <div  class="row-xs-2 d-flex mt-2 mb-0 justify-content-center">
+                        <label for="file-upload" class="custom-file-upload">
+                            <i class="fa fa-cloud-upload"></i> Upload Picture
+                        </label>
+                        <input id="file-upload" name="image" type="file"/>
+                    </div>
+                </div>
+                <div clas="col-md-auto">
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col">
+                    <div class="d-flex p-2 justify-content-start">
+                        <a href="/animals/{{ animal.id }}" class="btn btn-light mx-2 px-5" type="submit" aria-expanded="false">
+                            Cancel
+                        </a>
+                    </div>
+                </div>
+                <div class="col text-center d-flex align-items-center justify-content-center">
+                    <input style="max-width:60%;" class="text-capitalize" value="{{ animal.name }}" name="name" required></input>
+                </div>
+                <div class="col">
+                    <div class="d-flex p-2 justify-content-end">
+                        <button class="btn btn-success mx-2 px-5" type="submit" aria-expanded="false">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col">
+                    <h4>Species</h4>
+                    <input name="species" style="max-width:60%;"class="lead" value="{{ animal.species }}" required></input>
+                </div>
+                <div class="col">
+                    <h4>Age</h4>
+                    {% if animal.age %}
+                        <h5 class="lead text-capitalize">{{ animal.age }}</h5>
+                    {% else %}
+                        <h5 class="lead">N/A</h5>
+                    {% endif %}
+                </div>
+                <div class="col">
+                    <h4>Date of Birth</h4>
+                    {% if animal.date_of_birth %}
+                        <input name="date-of-birth" style="max-width:60%;" class="lead text-capitalize" type="date" value="{{ animal.date_of_birth }}" required></input>
+                    {% else %}
+                        <input name="date-of-birth" style="max-width:60%;" class="lead" type="date"></input>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col">
+                    <h4>Colour</h4>
+                    {% if animal.colour %}
+                        <input name="colour" style="max-width:60%;" class="lead text-capitalize" value="{{ animal.colour }}"></input>
+                    {% else %}
+                        <input name="colour" style="max-width:60%;" class="lead"></input>
+                    {% endif %}
+                </div>
+                <div class="col">
+                    <h4>Personality</h4>
+                    {% if animal.personality %}
+                        <input name="personality" style="max-width:60%;" class="lead text-capitalize" value="{{ animal.personality }}"></input>
+                    {% else %}
+                        <input name="personality" style="max-width:60%;" class="lead"></input>
+                    {% endif %}
+                </div>
+                <div class="col">
+                    <h4>ID</h4>
+                    {% if animal.id %}
+                        <input name="identification" style="max-width:60%;" class="lead text-capitalize" value="{{ animal.id }}"></input>
+                    {% else %}
+                        <input name="identification" style="max-width:60%;" class="lead"></input>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col">
+                    <h4>Height</h4>
+                    {% if animal.height %}
+                        <input name="height" style="max-width:60%;" class="lead text-capitalize ms-5" type="number" value="{{ animal.height }}"></input>
+                        <select name="height-type" id="height_type">
+                            <option value="cm">cm</option>
+                            <option value="m">m</option>
+                        </select>
+                    {% else %}
+                        <input name="height" style="max-width:60%;" class="lead ms-5" type="number"><input>
+                        <select name="height-type" id="height_type">
+                            <option value="cm">cm</option>
+                            <option value="m">m</option>
+                        </select>
+                    {% endif %}
+                </div>
+                <div class="col">
+                    <h4>Weight</h4>
+                    {% if animal.weight %}
+                        <input name="weight" style="max-width:60%;" class="lead text-capitalize ms-5" type="number" value="{{ animal.weight }}"></input>
+                        <select name="weight-type" id="weight_type">
+                            <option value="g">g</option>
+                            <option value="kg">kg</option>
+                        </select>
+                    {% else %}
+                        <input name="weight" style="max-width:60%;" class="lead ms-5" type="number"></input>
+                        <select name="weight-type" type="number" id="weight_type">
+                            <option value="g">g</option>
+                            <option value="kg">kg</option>
+                        </select>
+                    {% endif %}
+                </div>
+                <div class="col">
+                    <h4>Length</h4>
+                    {% if animal.length %}
+                        <input name="length" style="max-width:60%;" class="lead text-capitalize ms-5" type="number" value="{{ animal.length }}"></input>
+                        <select name="length-type" id="length_type">
+                            <option value="cm">cm</option>
+                            <option value="m">m</option>
+                        </select>
+                    {% else %}
+                        <input name="length" style="max-width:60%;" class="lead ms-5" type="number"></input>
+                        <select name="length-type" id="length_type">
+                            <option value="cm">cm</option>
+                            <option value="m">m</option>
+                        </select>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

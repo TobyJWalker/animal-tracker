@@ -6,10 +6,18 @@ from lib.validation import *
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 APP_ENV = os.environ.get('APP_ENV', 'development')
+UPLOAD_FOLDER = 'uploads/images'
+
 
 # create the app and configure it
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 create_db_tables()
+
+# make uploads folder if not existing
+if not os.path.exists('uploads'):
+    os.makedirs('uploads')
+    os.makedirs('uploads/images')
 
 # check if an uploaded image is an actual image file
 def allowed_file(filename):
@@ -19,13 +27,18 @@ def allowed_file(filename):
 def process_image(image):
     secure_name = secure_filename(image.filename)
 
-    with open(f'static/images/{secure_name}', 'wb') as file:
+    with open(f'uploads/images/{secure_name}', 'wb') as file:
         file.write(image.read())
 
-    pil_image = Image.open(f"static/images/{secure_name}")
+    pil_image = Image.open(f"uploads/images/{secure_name}")
     pil_image.thumbnail((500, 500))
-    pil_image.save(f"static/images/{secure_name}")
+    pil_image.save(f"uploads/images/{secure_name}")
 
+
+# route for image serving
+@app.route('/uploads/images/<name>')
+def download_file(name):
+    return send_from_directory(app.config["UPLOAD_FOLDER"], name)
 
 # index redirect to sign up page
 @app.route('/', methods=['GET'])
@@ -124,9 +137,9 @@ def create_animal():
 
     if image != None and allowed_file(image.filename):
         Thread(target=process_image, args=(image,)).start()
-        secure_name = secure_filename(image.filename)
+        secure_name = f'/uploads/images/{secure_filename(image.filename)}'
     else:
-        secure_name = ''
+        secure_name = None
 
     errors = generate_animal_errors(name, species)
 
@@ -134,8 +147,9 @@ def create_animal():
         Animal.create(name=name, 
                     species=species, 
                     owner=session['user_id'], 
-                    date_of_birth=date_of_birth, 
-                    img_url=f'/static/images/{secure_name}' if image != None else None
+                    date_of_birth=date_of_birth,
+                    age=datetime.today().year - int(date_of_birth[:4]),
+                    img_url=secure_name
                     )
         return redirect('/animals')
     else:
@@ -219,6 +233,72 @@ def edit_note_action(note_id):
         Notes.update(content=content).where(Notes.id == note_id).execute()
         return redirect(f'/animals/{note.animal.id}')
 
+# route to show edit an animal form
+@app.route('/animal/<int:animal_id>/edit', methods=['GET'])
+def edit_animal_form(animal_id):
+    if 'user_id' not in session:
+        return redirect('/login')
+    
+    animal = Animal.select().where(Animal.id == animal_id).get()
+
+    if animal.owner.id != session['user_id']:
+        return redirect('/animals')
+    else:
+        return render_template('edit_animal.html', animal=animal)
+    
+# route to edit an animal
+@app.route('/animal/<int:animal_id>/edit', methods=['POST'])
+def edit_animal(animal_id):
+    if 'user_id' not in session:
+        return redirect('/login')
+    
+    animal = Animal.select().where(Animal.id == animal_id).get()
+
+    if animal.owner.id != session['user_id']:
+        return redirect('/animals')
+    else:
+        name = request.form.get('name', animal.name)
+        species = request.form.get('species', animal.species)
+        date_of_birth = request.form.get('date-of-birth', animal.date_of_birth)
+        age = request.form.get('age', animal.age)
+        colour = request.form.get('colour', animal.colour)
+        personality = request.form.get('personality', animal.personality)
+        identification = request.form.get('identification', animal.tag)
+        height = request.form.get('height', animal.height)
+        height_type = request.form.get('height-type', animal.height_type)
+        weight = request.form.get('weight', animal.weight)
+        weight_type = request.form.get('weight-type', animal.weight_type)
+        length = request.form.get('length', animal.length)
+        length_type = request.form.get('length-type', animal.length_type)
+        image = request.files.get('image', None)
+
+        if image != None and allowed_file(image.filename):
+            Thread(target=process_image, args=(image,)).start()
+            secure_name = f'/uploads/images/{secure_filename(image.filename)}'
+        else:
+            secure_name = None
+
+        errors = generate_animal_errors(name, species)
+
+        if errors == None:
+            Animal.update(name=name, 
+                        species=species, 
+                        age=datetime.today().year - int(date_of_birth[:4]),
+                        colour=colour,
+                        personality=personality,
+                        tag=identification,
+                        height=height,
+                        height_type=height_type,
+                        weight=weight,
+                        weight_type=weight_type,
+                        length=length,
+                        length_type=length_type,
+                        date_of_birth=date_of_birth, 
+                        img_url=secure_name
+                        ).where(Animal.id == animal_id).execute()
+            return redirect(f'/animals/{animal_id}')
+        else:
+            return render_template('edit_animal.html', errors=errors, animal=animal)
 
 
 # run the app if file is executed
