@@ -101,17 +101,6 @@ class Notes(peewee.Model):
     def get_by_animal_id(animal_id):
         return [note for note in Notes.select().where(Notes.animal == animal_id)]
 
-class Group(peewee.Model):
-    name = peewee.CharField()
-    animals = peewee.ManyToManyField(Animal, backref='groups')
-
-    class Meta:
-        database = db
-        table_name = 'groups'
-
-    def __str__(self):
-        return self.name
-
 def create_db_tables():
     with db:
         db.create_tables([User, Animal, Notes])
