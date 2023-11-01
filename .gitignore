@@ -1,6 +1,7 @@
 *.sqlite3
 .DS_Store
 shared/
+animal-repo.tar
 
 
 #Byte-compiled / optimized / DLL files
