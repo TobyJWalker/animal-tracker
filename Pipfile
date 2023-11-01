@@ -9,6 +9,7 @@ peewee = "*"
 pytest = "*"
 pyopenssl = "*"
 pillow = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
