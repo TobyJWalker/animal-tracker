@@ -6,7 +6,11 @@ from datetime import datetime
 if os.environ.get('APP_ENV') == 'test':
     db = peewee.SqliteDatabase('test-db.sqlite3')
 else:
-    db = peewee.SqliteDatabase('shared/db/animal-info.sqlite3')
+    dbname = os.environ.get('POSTGRES_DB')
+    user = os.environ.get('POSTGRES_USER')
+    password = os.environ.get('POSTGRES_PASSWORD')
+
+    db = peewee.PostgresqlDatabase(dbname, user=user, password=password, host='postgres', port=5432)
 
 
 class User(peewee.Model):
