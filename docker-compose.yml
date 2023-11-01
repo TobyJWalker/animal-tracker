@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  postgres:
+      image: postgres:15-alpine
+      restart: always
+      ports:
+        - 5432:5432
+      volumes:
+        - db:/var/lib/postgresql/data
+      environment:
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_USER=postgres
+        - POSTGRES_DB=animal_repo
+      healthcheck:
+        test: ["CMD-SHELL", "sh -c 'pg_isready -U postgres -d animal_repo'"]
+        interval: 10s
+        timeout: 3s
+        retries: 3
+
+  animal-repo:
+    build: '.' 
+    ports: 
+      - 80:7474
+    container_name: animal-repo
+    volumes:
+      - animal-volume:/var/images
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=animal_repo
+
+volumes:
+  db:
+  animal-volume:
+    external: false
