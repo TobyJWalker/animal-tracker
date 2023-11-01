@@ -288,6 +288,9 @@ def edit_animal(animal_id):
         if image != None and allowed_file(image.filename):
             Thread(target=process_image, args=(image,)).start()
             secure_name = f'/shared/images/{secure_filename(image.filename)}'
+
+            if animal.img_url != None:
+                os.remove(f'{UPLOAD_FOLDER}/{animal.img_url.split("/")[-1]}')
         else:
             secure_name = None
 
