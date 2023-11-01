@@ -1,6 +1,6 @@
 import peewee, os
 from hashlib import sha256
-from datetime import datetime
+from datetime import datetime, date
 
 # create the peewee db object
 if os.environ.get('APP_ENV') == 'test':
