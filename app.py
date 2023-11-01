@@ -3,6 +3,7 @@ from werkzeug.utils import secure_filename
 from threading import Thread
 from PIL import Image
 from lib.validation import *
+from jinja_markdown import MarkdownExtension
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 APP_ENV = os.environ.get('APP_ENV', 'development')
@@ -17,6 +18,12 @@ elif APP_ENV == 'production':
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 create_db_tables()
+
+# create ssl context
+context = ('animal-repo.pem', 'animal-repo-key.pem')
+
+# add markdown extension
+app.jinja_env.add_extension(MarkdownExtension)
 
 # check if an uploaded image is an actual image file
 def allowed_file(filename):
@@ -131,7 +138,7 @@ def add_animal():
 def create_animal():
     name = request.form['name']
     species = request.form['species']
-    date_of_birth = request.form.get('date-of-birth', None)
+    date_of_birth = request.form.get('date-of-birth')
     image = request.files.get('image', None)
 
     if image != None and allowed_file(image.filename):
@@ -143,12 +150,20 @@ def create_animal():
     errors = generate_animal_errors(name, species)
 
     if errors == None:
+        today = datetime.today()
+        dob = date_of_birth.split('-')
+        dob = [int(i) for i in dob]
+        age = today.year - dob[0] - ((today.month, today.day) < (dob[1], dob[2]))
+
         Animal.create(name=name, 
                     species=species, 
                     owner=session['user_id'], 
                     date_of_birth=date_of_birth,
-                    age=datetime.today().year - int(date_of_birth[:4]),
-                    img_url=secure_name
+                    age=age,
+                    img_url=secure_name,
+                    height=0,
+                    weight=0,
+                    length=0,
                     )
         return redirect('/animals')
     else:
@@ -259,7 +274,6 @@ def edit_animal(animal_id):
         name = request.form.get('name', animal.name)
         species = request.form.get('species', animal.species)
         date_of_birth = request.form.get('date-of-birth', animal.date_of_birth)
-        age = request.form.get('age', animal.age)
         colour = request.form.get('colour', animal.colour)
         personality = request.form.get('personality', animal.personality)
         identification = request.form.get('identification', animal.tag)
@@ -269,7 +283,7 @@ def edit_animal(animal_id):
         weight_type = request.form.get('weight-type', animal.weight_type)
         length = request.form.get('length', animal.length)
         length_type = request.form.get('length-type', animal.length_type)
-        image = request.files.get('image', None)
+        image = request.files.get('image', None if animal.img_url == None else animal.img_url)
 
         if image != None and allowed_file(image.filename):
             Thread(target=process_image, args=(image,)).start()
@@ -280,9 +294,14 @@ def edit_animal(animal_id):
         errors = generate_animal_errors(name, species)
 
         if errors == None:
+            today = datetime.today()
+            dob = date_of_birth.split('-')
+            dob = [int(i) for i in dob]
+            age = today.year - dob[0] - ((today.month, today.day) < (dob[1], dob[2]))
+
             Animal.update(name=name, 
                         species=species, 
-                        age=datetime.today().year - int(date_of_birth[:4]),
+                        age=age,
                         colour=colour,
                         personality=personality,
                         tag=identification,
@@ -307,7 +326,7 @@ if __name__ == "__main__":
         app.run(debug=True, port=int(os.environ.get('PORT', 7474)))
     elif APP_ENV == 'production':
         app.secret_key = os.urandom(16)
-        app.run(debug=False, host='0.0.0.0', port=7474)
+        app.run(debug=False, host='0.0.0.0', port=7474, ssl_context=context)
     else:
         app.secret_key = os.urandom(16)
         app.run(debug=True, port=7474)
