@@ -21,7 +21,7 @@ services:
   animal-repo:
     build: '.' 
     ports: 
-      - 80:7474
+      - 443:7474
     container_name: animal-repo
     volumes:
       - animal-volume:/var/images
