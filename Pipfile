@@ -10,6 +10,7 @@ pytest = "*"
 pyopenssl = "*"
 pillow = "*"
 psycopg2 = "*"
+markdown = "*"
 
 [dev-packages]
 
