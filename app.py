@@ -6,7 +6,7 @@ from lib.validation import *
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 APP_ENV = os.environ.get('APP_ENV', 'development')
-UPLOAD_FOLDER = 'uploads/images'
+UPLOAD_FOLDER = 'shared/images'
 
 
 # create the app and configure it
@@ -14,10 +14,12 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 create_db_tables()
 
-# make uploads folder if not existing
-if not os.path.exists('uploads'):
-    os.makedirs('uploads')
-    os.makedirs('uploads/images')
+# make shared folder if not existing
+if not os.path.exists('shared/images'):
+    os.makedirs('shared/images')
+
+if not os.path.exists('shared/db'):
+    os.makedirs('shared/db')
 
 # check if an uploaded image is an actual image file
 def allowed_file(filename):
@@ -27,16 +29,16 @@ def allowed_file(filename):
 def process_image(image):
     secure_name = secure_filename(image.filename)
 
-    with open(f'uploads/images/{secure_name}', 'wb') as file:
+    with open(f'shared/images/{secure_name}', 'wb') as file:
         file.write(image.read())
 
-    pil_image = Image.open(f"uploads/images/{secure_name}")
+    pil_image = Image.open(f"shared/images/{secure_name}")
     pil_image.thumbnail((500, 500))
-    pil_image.save(f"uploads/images/{secure_name}")
+    pil_image.save(f"shared/images/{secure_name}")
 
 
 # route for image serving
-@app.route('/uploads/images/<name>')
+@app.route('/shared/images/<name>')
 def download_file(name):
     return send_from_directory(app.config["UPLOAD_FOLDER"], name)
 
@@ -137,7 +139,7 @@ def create_animal():
 
     if image != None and allowed_file(image.filename):
         Thread(target=process_image, args=(image,)).start()
-        secure_name = f'/uploads/images/{secure_filename(image.filename)}'
+        secure_name = f'/shared/images/{secure_filename(image.filename)}'
     else:
         secure_name = None
 
@@ -274,7 +276,7 @@ def edit_animal(animal_id):
 
         if image != None and allowed_file(image.filename):
             Thread(target=process_image, args=(image,)).start()
-            secure_name = f'/uploads/images/{secure_filename(image.filename)}'
+            secure_name = f'/shared/images/{secure_filename(image.filename)}'
         else:
             secure_name = None
 
