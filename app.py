@@ -179,6 +179,22 @@ def create_animal():
     else:
         return render_template('new_animal.html', errors=errors)
 
+# route to delete an animal
+@app.route('/animals/<int:animal_id>/delete', methods=['POST'])
+def delete_animal(animal_id):
+    if 'user_id' in session:
+        animal = Animal.select().where(Animal.id == animal_id).get()
+
+        if animal.owner.id != session['user_id']:
+            return redirect('/animals')
+        else:
+            if animal.img_url != None:
+                os.remove(f'{UPLOAD_FOLDER}/{animal.img_url.split("/")[-1]}')
+            Animal.delete().where(Animal.id == animal_id).execute()
+            return redirect('/animals')
+    else:
+        return redirect('/login')
+
 # route to view an animal
 @app.route('/animals/<int:animal_id>', methods=['GET'])
 def view_animal(animal_id):
