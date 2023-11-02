@@ -292,7 +292,7 @@ def edit_animal(animal_id):
         weight_type = request.form.get('weight-type', animal.weight_type)
         length = request.form.get('length', animal.length)
         length_type = request.form.get('length-type', animal.length_type)
-        image = request.files.get('image', None if animal.img_url == None else animal.img_url)
+        image = request.files.get('image', None)
 
         if image != None and allowed_file(image.filename):
             Thread(target=process_image, args=(image,)).start()
@@ -301,7 +301,10 @@ def edit_animal(animal_id):
             if animal.img_url != None:
                 os.remove(f'{UPLOAD_FOLDER}/{animal.img_url.split("/")[-1]}')
         else:
-            secure_name = None
+            if animal.img_url != None:
+                secure_name = animal.img_url
+            else:
+                secure_name = None
 
         errors = generate_animal_errors(name, species)
 
