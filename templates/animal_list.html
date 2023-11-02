@@ -55,7 +55,9 @@
                             </div>
                         </div>
                         <div class="col p-2 d-flex align-items-center justify-content-end">
-                            <h1 style="color:gray;">></h1>
+                            <form action="/animals/{{ animal.id }}/delete" method="POST">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
                         </div>
                     </div>
                 </a>
