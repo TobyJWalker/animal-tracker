@@ -41,6 +41,15 @@ def process_image(image):
     pil_image.save(f"{UPLOAD_FOLDER}/{secure_name}")
 
 
+# enforce https
+@app.before_request
+def before_request():
+    scheme = request.headers.get('X-Forwarded-Proto')
+    if scheme and scheme == 'http' and request.url.startswith('http://'):
+        url = request.url.replace('http://', 'https://', 1)
+        code = 301
+        return redirect(url, code=code)
+
 # route for image serving
 @app.route('/shared/images/<name>')
 def download_file(name):
