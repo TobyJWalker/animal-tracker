@@ -4,6 +4,7 @@ from threading import Thread
 from PIL import Image
 from lib.validation import *
 from jinja_markdown import MarkdownExtension
+from time import sleep
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 APP_ENV = os.environ.get('APP_ENV', 'development')
@@ -329,6 +330,9 @@ def edit_animal(animal_id):
                         date_of_birth=date_of_birth, 
                         img_url=secure_name
                         ).where(Animal.id == animal_id).execute()
+            
+            sleep(0.5) # wait for image to be processed
+
             return redirect(f'/animals/{animal_id}')
         else:
             return render_template('edit_animal.html', errors=errors, animal=animal)
