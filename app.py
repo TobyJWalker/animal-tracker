@@ -395,7 +395,7 @@ def edit_animal(animal_id):
                     folder_name = f'{randint(0, 100000)}-{animal.name}'
                     os.mkdir(f'{UPLOAD_FOLDER}/{folder_name}')
                 else:
-                    folder_name = split_url[4]
+                    folder_name = split_url[-2]
                 try:
                     os.remove(f'{UPLOAD_FOLDER}/{folder_name}/{animal.img_url.split("/")[-1]}')
                 except:
