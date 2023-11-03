@@ -270,7 +270,7 @@ def delete_animal(animal_id):
                     os.remove(f'{UPLOAD_FOLDER}/{img_url}')
                 except:
                     pass
-            Notes.delete().where(Notes.animal.id == animal_id).execute()
+            Notes.delete().where(Notes.animal == animal).execute()
             Animal.delete().where(Animal.id == animal_id).execute()
             return redirect('/animals')
     else:
