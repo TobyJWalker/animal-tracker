@@ -55,32 +55,6 @@ Some basic security will be implemented such as:
 - using https to encrypt the data sent between the client and server.
 - api key will be required to access personal animal data (You can only access your animals or others with permission).
 
-# How to run
-
-You can host it locally if you like, but some setup is required.
-
-**SETUP**
-
-```bash
-Mac/Linux:
-    chmod +x setup.sh
-    ./setup.sh
-
-Windows:
-    setup.bat
-```
-
-** RUN **
-
-```bash
-Mac/Linux:
-    chmod +x run.sh
-    ./run.sh
-
-Windows:
-    run.bat
-```
-
 # Contribution
 
 I request that you do not contribute to this project as it is a personal project to practice my skills. If you have any suggestions or feedback, please feel free to contact me however as I would love a challenge to add more features or improve it as time goes on (assuming I am learning something new from it).
