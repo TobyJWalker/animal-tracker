@@ -266,7 +266,10 @@ def delete_animal(animal_id):
             if animal.img_url != None:
                 img_url_list = animal.img_url.split('/')
                 img_url = f'{img_url_list[-2]}/{img_url_list[-1]}'
-                os.remove(f'{UPLOAD_FOLDER}/{img_url}')
+                try:
+                    os.remove(f'{UPLOAD_FOLDER}/{img_url}')
+                except:
+                    pass
             Animal.delete().where(Animal.id == animal_id).execute()
             return redirect('/animals')
     else:
