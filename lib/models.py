@@ -1,6 +1,16 @@
 import peewee, os
 from hashlib import sha256
 from datetime import datetime, date
+import string
+from random import choice
+
+
+# function to generate a random string of length
+def get_random_string(length):
+    # choose from all lowercase letter
+    letters = string.ascii_letters + string.digits
+    result_str = ''.join(choice(letters) for i in range(length))
+    return result_str
 
 # create the peewee db object
 if os.environ.get('APP_ENV') == 'test':
@@ -37,6 +47,14 @@ class User(peewee.Model):
                 return user
             else:
                 return None
+        except:
+            return None
+    
+    @staticmethod
+    def get_by_api_key(key):
+        try:
+            api_key = ApiKey.get(ApiKey.key == key)
+            return api_key.user
         except:
             return None
 
@@ -105,9 +123,37 @@ class Notes(peewee.Model):
     def get_by_animal_id(animal_id):
         return [note for note in Notes.select().where(Notes.animal == animal_id)]
 
+
+class ApiKey(peewee.Model):
+    key = peewee.CharField(unique=True)
+    user = peewee.ForeignKeyField(User, backref='api_keys')
+
+    class Meta:
+        database = db
+        table_name = 'api_keys'
+
+    def __str__(self):
+        return self.key
+    
+    def get_by_user_id(user_id):
+        try:
+            key = ApiKey.select().where(ApiKey.user == user_id).get().key
+
+            if key:
+                return key
+            return None
+        except:
+            return None
+    
+    def generate_key(user_id):
+        seed = get_random_string(5) + str(datetime.now()) + get_random_string(5)
+        key = sha256(seed.encode()).hexdigest()
+        ApiKey.create(key=key, user=user_id)
+        return key
+
 def create_db_tables():
     with db:
-        db.create_tables([User, Animal, Notes])
+        db.create_tables([User, Animal, Notes, ApiKey])
 
 if __name__ == '__main__':
     create_db_tables()

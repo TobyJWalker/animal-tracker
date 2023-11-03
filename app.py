@@ -1,10 +1,11 @@
-from flask import Flask, request, render_template, session, redirect, send_from_directory
+from flask import Flask, request, render_template, session, redirect, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 from threading import Thread
 from PIL import Image
 from lib.validation import *
 from jinja_markdown import MarkdownExtension
 from time import sleep
+from random import randint
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 APP_ENV = os.environ.get('APP_ENV', 'development')
@@ -31,8 +32,8 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # compress and save images uploaded
-def process_image(image):
-    secure_name = secure_filename(image.filename)
+def process_image(image, folder):
+    secure_name = f'{folder}/{secure_filename(image.filename)}'
 
     with open(f'{UPLOAD_FOLDER}/{secure_name}', 'wb') as file:
         file.write(image.read())
@@ -42,7 +43,78 @@ def process_image(image):
     pil_image.save(f"{UPLOAD_FOLDER}/{secure_name}")
 
 
-# enforce https
+# route to generate/retrieve api key
+@app.route('/api-key', methods=['GET'])
+def get_api_key():
+    if 'user_id' not in session:
+        return redirect('/login')
+    else:
+        key = ApiKey.get_by_user_id(session['user_id'])
+
+        if key == None:
+            key = ApiKey.generate_key(session['user_id'])
+
+        return f'Your api-key: {key}'
+
+# route to get all animals through api-key
+@app.route('/api/<string:api_key>/animals', methods=['GET'])
+def get_animals(api_key):
+    user = User.get_by_api_key(api_key)
+
+    if user == None:
+        return None
+    else:
+        animals = Animal.get_animals_by_user_id(user.id)
+        json_data = [{
+            'name': animal.name,
+            'species': animal.species,
+            'age': animal.age,
+            'date_of_birth': datetime.strftime(animal.date_of_birth, '%Y-%m-%d'),
+            'colour': animal.colour,
+            'personality': animal.personality,
+            'tag': animal.tag,
+            'owner': animal.owner.username,
+            'height': animal.height,
+            'height_type': animal.height_type,
+            'weight': animal.weight,
+            'weight_type': animal.weight_type,
+            'length': animal.length,
+            'length_type': animal.length_type,
+        } for animal in animals]
+        return jsonify(json_data)
+
+# route to get an animal through api-key
+@app.route('/api/<string:api_key>/animals/<string:animal_name>', methods=['GET'])
+def get_animal(api_key, animal_name):
+    user = User.get_by_api_key(api_key)
+
+    if user == None:
+        return None
+    else:
+        animals = Animal.get_animals_by_user_id(user.id)
+
+        for animal in animals:
+            if animal.name.lower() == animal_name.lower():
+                json_data = {
+                    'name': animal.name,
+                    'species': animal.species,
+                    'age': animal.age,
+                    'date_of_birth': datetime.strftime(animal.date_of_birth, '%Y-%m-%d'),
+                    'colour': animal.colour,
+                    'personality': animal.personality,
+                    'tag': animal.tag,
+                    'owner': animal.owner.username,
+                    'height': animal.height,
+                    'height_type': animal.height_type,
+                    'weight': animal.weight,
+                    'weight_type': animal.weight_type,
+                    'length': animal.length,
+                    'length_type': animal.length_type,
+                }
+                return jsonify(json_data)
+        return None
+
+# enforce https with aws
 @app.before_request
 def before_request():
     scheme = request.headers.get('X-Forwarded-Proto')
@@ -52,9 +124,9 @@ def before_request():
         return redirect(url, code=code)
 
 # route for image serving
-@app.route('/shared/images/<name>')
-def download_file(name):
-    return send_from_directory(app.config["UPLOAD_FOLDER"], name)
+@app.route('/shared/images/<folder>/<name>')
+def download_file(folder, name):
+    return send_from_directory(f'{app.config["UPLOAD_FOLDER"]}/{folder}', name)
 
 # index redirect to sign up page
 @app.route('/', methods=['GET'])
@@ -152,8 +224,11 @@ def create_animal():
     image = request.files.get('image', None)
 
     if image != None and allowed_file(image.filename):
-        Thread(target=process_image, args=(image,)).start()
-        secure_name = f'/shared/images/{secure_filename(image.filename)}'
+        folder_name = f'{randint(0, 100000)}-{name}'
+        os.mkdir(f'{UPLOAD_FOLDER}/{folder_name}')
+            
+        Thread(target=process_image, args=(image,folder_name,)).start()
+        secure_name = f'/shared/images/{folder_name}/{secure_filename(image.filename)}'
     else:
         secure_name = None
 
@@ -189,7 +264,9 @@ def delete_animal(animal_id):
             return redirect('/animals')
         else:
             if animal.img_url != None:
-                os.remove(f'{UPLOAD_FOLDER}/{animal.img_url.split("/")[-1]}')
+                img_url_list = animal.img_url.split('/')
+                img_url = f'{img_url_list[-2]}/{img_url_list[-1]}'
+                os.remove(f'{UPLOAD_FOLDER}/{img_url}')
             Animal.delete().where(Animal.id == animal_id).execute()
             return redirect('/animals')
     else:
@@ -312,11 +389,19 @@ def edit_animal(animal_id):
         image = request.files.get('image', None)
 
         if image != None and allowed_file(image.filename):
-            Thread(target=process_image, args=(image,)).start()
-            secure_name = f'/shared/images/{secure_filename(image.filename)}'
-
             if animal.img_url != None:
-                os.remove(f'{UPLOAD_FOLDER}/{animal.img_url.split("/")[-1]}')
+                folder_name = animal.img_url.split('/')[3]
+                try:
+                    os.remove(f'{UPLOAD_FOLDER}/{folder_name}/{animal.img_url.split("/")[-1]}')
+                except:
+                    pass
+            else:
+                folder_name = f'{randint(0, 100000)}-{animal.name}'
+                os.mkdir(f'{UPLOAD_FOLDER}/{folder_name}')
+
+            Thread(target=process_image, args=(image,folder_name,)).start()
+            secure_name = f'/shared/images/{folder_name}/{secure_filename(image.filename)}'
+
         else:
             if animal.img_url != None:
                 secure_name = animal.img_url
