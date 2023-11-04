@@ -189,16 +189,22 @@ def logout():
 @app.route('/animals', methods=['GET'])
 def animals():
     if 'user_id' in session:
+
+        if 'sort_by' in session:
+            return redirect(f'/animals/sort/{session["sort_by"]}')
+
         animals = Animal.get_animals_by_user_id(session['user_id'])
         return render_template('animal_list.html', animals=animals)
     else:
         return redirect('/login')
     
 # route to sort animal
-@app.route('/animals/sort/<string:sort_by>-<string:order>/', methods=['GET'])
+@app.route('/animals/sort/<string:sort_by>-<string:order>', methods=['GET'])
 def sort_animals(sort_by, order):
     if 'user_id' not in session:
         return redirect('/login')
+    
+    session['sort_by'] = f'{sort_by}-{order}'
     
     animals = Animal.get_animals_by_user_id(session['user_id'])
 
