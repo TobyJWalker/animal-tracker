@@ -7,7 +7,7 @@
         <form action="/note/{{ note.id }}/edit" method="post">
             <div class="row justify-content-md-center">
                 <div class="col">
-                    <textarea class="form-control" id="content" name="content" rows="5" placeholder="Note">{{ note.content }}</textarea>
+                    <textarea class="form-control" id="content" name="content" rows="5" placeholder="Note">{{ note.content.replace('<br>', '') }}</textarea>
                 </div>
             </div>
             <div class="row">
