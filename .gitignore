@@ -2,7 +2,6 @@
 .DS_Store
 shared/
 animal-repo.tar
-*.pem
 
 
 #Byte-compiled / optimized / DLL files
