@@ -13,7 +13,7 @@ pipeline {
             }
         }
 
-        stage('Deploy to S3') {
+        stage('Deploy to EC2') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: env.AWS_CREDENTIALS, secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                     sh '''
