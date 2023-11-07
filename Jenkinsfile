@@ -17,9 +17,9 @@ pipeline {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: env.AWS_CREDENTIALS, secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                     sh '''
-                    docker-compose down
-                    docker-compose build
-                    docker-compose up
+                    sudo docker-compose down
+                    sudo docker-compose build
+                    sudo docker-compose up
                     '''
                 }
             }
