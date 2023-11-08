@@ -30,7 +30,7 @@ pipeline {
                 mv priv_key.pem key
                 mv cert/cert.pem .
                 mv key/priv_key.pem .
-                rmdir cert key
+                rm -r cert key
                 '''
             }
         }
