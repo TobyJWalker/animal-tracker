@@ -14,29 +14,45 @@ pipeline {
             }
         }
 
-        stage('Clear Old Certificates') {
+        stage('Clear Old Setup Files') {
             steps {
-                sh 'rm cert.pem priv_key.pem'
-            }
-        }
-
-        stage('Download Certificates') {
-            steps {
-                withAWS(region: 'eu-west-2', credentials: env.AWS_CREDENTIALS) {
-                    s3Download(bucket: 'animal-repo-bucket', file:'cert.pem')
-                    s3Download(bucket: 'animal-repo-bucket', file:'priv_key.pem')
+                script {
+                    try {
+                        sh 'rm cert.pem priv_key.pem'
+                        echo 'Old certificates removed'
+                    } catch (err) {
+                        echo 'No old certificates found'
+                    }
+                    try {
+                        sh 'rm docker-compose.yml'
+                        echo 'Old docker-compose.yml removed'
+                    } catch (err) {
+                        echo 'No old docker-compose.yml found'
+                    }
                 }
             }
         }
 
-        stage('Unpack Certificates') {
+        stage('Download Setup Files') {
+            steps {
+                withAWS(region: 'eu-west-2', credentials: env.AWS_CREDENTIALS) {
+                    s3Download(bucket: 'animal-repo-bucket', file:'cert.pem')
+                    s3Download(bucket: 'animal-repo-bucket', file:'priv_key.pem')
+                    s3Download(bucket: 'animal-repo-bucket', file:'docker-compose.yml')
+                }
+            }
+        }
+
+        stage('Unpack Setup Files') {
             steps {
                 sh '''
                 mv cert.pem cert
                 mv priv_key.pem key
+                mv docker-compose.yml docker-compose-dir
                 mv cert/cert.pem .
                 mv key/priv_key.pem .
-                rm -r cert key
+                mv docker-compose-dir/docker-compose.yml .
+                rm -r cert key docker-compose-dir
                 '''
             }
         }
