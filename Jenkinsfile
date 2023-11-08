@@ -10,14 +10,15 @@ pipeline {
         stage('Clone Repo') {
             steps {
                 git branch: 'main', credentialsId: env.GIT_CREDENTIALS, url: 'https://github.com/TobyJWalker/animal-tracker.git'
+                sh 'pwd'
             }
         }
 
         stage('Download Certificates') {
             steps {
                 withAWS(region: 'eu-west-2', credentials: env.AWS_CREDENTIALS) {
-                    s3Download(bucket: 'animal-repo-bucket', file:'cert.pem', path: './')
-                    s3Download(bucket: 'animal-repo-bucket', file:'priv_key.pem', path: './')
+                    s3Download(bucket: 'animal-repo-bucket', file:'cert.pem', path: '.')
+                    s3Download(bucket: 'animal-repo-bucket', file:'priv_key.pem', path: '.')
                 }
             }
         }
