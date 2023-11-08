@@ -23,6 +23,18 @@ pipeline {
             }
         }
 
+        stage('Unpack Certificates') {
+            steps {
+                sh '''
+                mv cert.pem cert
+                mv priv_key.pem key
+                mv cert/cert.pem .
+                mv key/priv_key.pem .
+                rmdir cert key
+                '''
+            }
+        }
+
         stage('Deploy to EC2') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: env.AWS_CREDENTIALS, secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
