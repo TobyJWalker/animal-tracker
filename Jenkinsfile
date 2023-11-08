@@ -14,6 +14,12 @@ pipeline {
             }
         }
 
+        stage('Clear Old Certificates') {
+            steps {
+                sh 'rm cert.pem priv_key.pem'
+            }
+        }
+
         stage('Download Certificates') {
             steps {
                 withAWS(region: 'eu-west-2', credentials: env.AWS_CREDENTIALS) {
