@@ -103,6 +103,11 @@ class Animal(peewee.Model):
                 animals = sorted(animal_list, key=lambda animal: animal.age)
             else:
                 animals = sorted(animal_list, key=lambda animal: animal.age, reverse=True)
+        elif sort_by == 'tag':
+            if order == 'asc':
+                animals = sorted(animal_list, key=lambda animal: animal.tag.lower())
+            else:
+                animals = sorted(animal_list, key=lambda animal: animal.tag.lower(), reverse=True)
         else:
             return animal_list
         
