@@ -17,8 +17,8 @@ pipeline {
         stage('Download Certificates') {
             steps {
                 withAWS(region: 'eu-west-2', credentials: env.AWS_CREDENTIALS) {
-                    s3Download(bucket: 'animal-repo-bucket', file:'cert.pem', path: '/var/lib/jenkins/workspace/animal-repo-deploy')
-                    s3Download(bucket: 'animal-repo-bucket', file:'priv_key.pem', path: '/var/lib/jenkins/workspace/animal-repo-deploy')
+                    s3Download(bucket: 'animal-repo-bucket', file:'cert.pem')
+                    s3Download(bucket: 'animal-repo-bucket', file:'priv_key.pem')
                 }
             }
         }
