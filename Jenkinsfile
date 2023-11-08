@@ -13,6 +13,15 @@ pipeline {
             }
         }
 
+        stage('Download Certificates') {
+            steps {
+                withAWS(region: 'eu-west-2', credentials: env.AWS_CREDENTIALS) {
+                    s3Download(bucket: 'animal-repo-bucket', file:'cert.pem', path: './')
+                    s3Download(bucket: 'animal-repo-bucket', file:'priv_key.pem', path: './')
+                }
+            }
+        }
+
         stage('Deploy to EC2') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: env.AWS_CREDENTIALS, secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
