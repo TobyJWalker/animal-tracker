@@ -57,8 +57,10 @@ def get_api_key():
         return f'Your api-key: {key}'
 
 # route to get all animals through api-key
-@app.route('/api/<string:api_key>/animals', methods=['GET'])
-def get_animals(api_key):
+@app.route('/api/animals', methods=['POST'])
+def get_animals():
+    api_key = request.form['api-key']
+
     user = User.get_by_api_key(api_key)
 
     if user == None:
@@ -84,8 +86,10 @@ def get_animals(api_key):
         return jsonify(json_data)
 
 # route to get an animal through api-key
-@app.route('/api/<string:api_key>/animals/<string:animal_name>', methods=['GET'])
-def get_animal(api_key, animal_name):
+@app.route('/api/animals/<string:animal_name>', methods=['POST'])
+def get_animal(animal_name):
+    api_key = request.form['api-key']
+
     user = User.get_by_api_key(api_key)
 
     if user == None:
