@@ -50,14 +50,7 @@
                     <h4>Species</h4>
                     <input name="species" style="max-width:60%;"class="lead" value="{{ animal.species }}" required></input>
                 </div>
-                <div class="col">
-                    <h4>Age</h4>
-                    {% if animal.age %}
-                        <h5 class="lead text-capitalize">{{ animal.age }}</h5>
-                    {% else %}
-                        <h5 class="lead">N/A</h5>
-                    {% endif %}
-                </div>
+                <div class="col"></div>
                 <div class="col">
                     <h4>Date of Birth</h4>
                     {% if animal.date_of_birth %}
