@@ -91,13 +91,13 @@
                 <div class="col">
                     <h4>Height</h4>
                     {% if animal.height %}
-                        <input name="height" style="max-width:60%;" class="lead text-capitalize ms-5" type="number" value="{{ animal.height }}"></input>
+                        <input name="height" style="max-width:60%;" class="lead text-capitalize ms-5" type="float" value="{{ animal.height }}"></input>
                         <select name="height-type" id="height_type">
                             <option value="cm">cm</option>
                             <option value="m">m</option>
                         </select>
                     {% else %}
-                        <input name="height" style="max-width:60%;" class="lead ms-5" type="number" value="0"></input>
+                        <input name="height" style="max-width:60%;" class="lead ms-5" type="float" value="0"></input>
                         <select name="height-type" id="height_type">
                             <option value="cm">cm</option>
                             <option value="m">m</option>
@@ -107,13 +107,13 @@
                 <div class="col">
                     <h4>Weight</h4>
                     {% if animal.weight %}
-                        <input name="weight" style="max-width:60%;" class="lead text-capitalize ms-5" type="number" value="{{ animal.weight }}"></input>
+                        <input name="weight" style="max-width:60%;" class="lead text-capitalize ms-5" type="float" value="{{ animal.weight }}"></input>
                         <select name="weight-type" id="weight_type">
                             <option value="g">g</option>
                             <option value="kg">kg</option>
                         </select>
                     {% else %}
-                        <input name="weight" style="max-width:60%;" class="lead ms-5" type="number" value="0"></input>
+                        <input name="weight" style="max-width:60%;" class="lead ms-5" type="float" value="0"></input>
                         <select name="weight-type" type="number" id="weight_type">
                             <option value="g">g</option>
                             <option value="kg">kg</option>
@@ -123,13 +123,13 @@
                 <div class="col">
                     <h4>Length</h4>
                     {% if animal.length %}
-                        <input name="length" style="max-width:60%;" class="lead text-capitalize ms-5" type="number" value="{{ animal.length }}"></input>
+                        <input name="length" style="max-width:60%;" class="lead text-capitalize ms-5" type="float" value="{{ animal.length }}"></input>
                         <select name="length-type" id="length_type">
                             <option value="cm">cm</option>
                             <option value="m">m</option>
                         </select>
                     {% else %}
-                        <input name="length" style="max-width:60%;" class="lead ms-5" type="number" value="0"></input>
+                        <input name="length" style="max-width:60%;" class="lead ms-5" type="float" value="0"></input>
                         <select name="length-type" id="length_type">
                             <option value="cm">cm</option>
                             <option value="m">m</option>
