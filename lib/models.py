@@ -3,7 +3,10 @@ from hashlib import sha256
 from datetime import datetime, date
 import string
 from random import choice
+import time
 
+DB_CONNECT_TRIES = 10
+connected = False
 
 # function to generate a random string of length
 def get_random_string(length):
@@ -20,7 +23,14 @@ else:
     user = os.environ.get('POSTGRES_USER')
     password = os.environ.get('POSTGRES_PASSWORD')
 
-    db = peewee.PostgresqlDatabase(dbname, user=user, password=password, host='postgres', port=5432)
+    for i in range(DB_CONNECT_TRIES):
+        if not connected:
+            try:
+                db = peewee.PostgresqlDatabase(dbname, user=user, password=password, host='postgres', port=5432)
+                connected = True
+            except:
+                print('Could not connect to database, retrying...')
+                time.sleep(5)
 
 
 class User(peewee.Model):
