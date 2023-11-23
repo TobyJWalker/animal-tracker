@@ -1,0 +1,5 @@
+tests/
+seeds/
+.pytest_cache/
+README.md
+test*
